@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\moritz\coding\c\pgp_sgrt_project\pgp_sgrt_project\functions.h(8): warning C4091: 'typedef ': ignored on left of 'sqrt_obj' when no variable is declared
+c:\users\moritz\coding\c\pgp_sgrt_project\pgp_sgrt_project\functions.h(14): warning C4091: 'typedef ': ignored on left of 'heron_obj' when no variable is declared
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\C\PGP_sgrt_Project\Debug\PGP_sgrt_Project.exe
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\C\PGP_sgrt_Project\Debug\PGP_sgrt_Project.pdb (Partial PDB)
