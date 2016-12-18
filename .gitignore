@@ -5,3 +5,8 @@ pgp_sqrt_project/Debug/PGP_sgrt_Project.ilk
 *.tlog
 *.idb
 pgp_sqrt_project/PGP_sgrt_Project/Debug/PGP_sgrt_Project.tlog/PGP_sgrt_Project.lastbuildstate
+pgp_sqrt_project/PGP_sgrt_Project/Debug/main.obj
+*.obj
+*.exe
+pgp_sqrt_project/Debug/PGP_sgrt_Project.ilk
+*.pdb
