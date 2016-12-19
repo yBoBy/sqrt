@@ -1,11 +1,1 @@
-﻿  main.cpp
-c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\functions.h(8): warning C4091: 'typedef ': ignored on left of 'sqrt_obj' when no variable is declared
-c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\functions.h(14): warning C4091: 'typedef ': ignored on left of 'heron_obj' when no variable is declared
-c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(92): warning C4477: 'printf' : format string '%li' requires an argument of type 'long', but variadic argument 2 has type '__int64'
-  c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(92): note: consider using '%lli' in the format string
-  c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(92): note: consider using '%I64i' in the format string
-c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(105): warning C4477: 'printf' : format string '%li' requires an argument of type 'long', but variadic argument 2 has type '__int64'
-  c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(105): note: consider using '%lli' in the format string
-  c:\users\email\documents\github\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(105): note: consider using '%I64i' in the format string
-  PGP_sgrt_Project.vcxproj -> C:\Users\email\Documents\GitHub\sqrt\pgp_sqrt_project\Debug\PGP_sgrt_Project.exe
-  PGP_sgrt_Project.vcxproj -> C:\Users\email\Documents\GitHub\sqrt\pgp_sqrt_project\Debug\PGP_sgrt_Project.pdb (Partial PDB)
+
