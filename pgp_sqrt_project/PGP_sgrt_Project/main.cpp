@@ -1,7 +1,30 @@
-#include <stdio.h>
 #include "Functions.h"
 
 
+int main() {
+	sqrt_obj so = userInput();
+	heron_obj ho;
+	initHeronObject(&ho, so.zahl);
+
+	heron(&ho, &so);
+	printf("---------------------------------------------------------------\n");
+	printf("Heron iterativ: Quadratwurzel: %lf Genauigkeit: %f\n", so.ergebnis, so.genauigkeit);
+
+	initHeronObject(&ho, so.zahl);
+	printf("---------------------------------------------------------------\n");
+	printf("Heron rekursiv: Quadratwurzel: %lf Genauigkeit: %f", berechneWurzelRekursiv(&ho, &so), so.genauigkeit);
+
+	zeitmessung(&ho, &so);
+
+	getchar(); getchar();
+	return 0;
+}
+
+void initHeronObject(heron_obj *ho, int zahl) {
+	ho->laenge =zahl;
+	ho->breite =1;
+	ho->differenz = ho->laenge- ho->breite;
+}
 
 sqrt_obj userInput() {
 	sqrt_obj tmp;
@@ -14,43 +37,73 @@ sqrt_obj userInput() {
 }
 
 
-
-
 void heron(heron_obj *ho, sqrt_obj *so) {
-	ho-> laenge = (ho->laenge + ho->breite)/2;
-	ho->breite = so->zahl / ho->laenge;
-	double differenz = ho->laenge - ho->breite;
-	if (differenz >= 0) {
-		ho->differenz = differenz;
+	ho->differenz = ho->laenge - ho->breite;
+	if (ho->differenz >= 0) {
+		ho->differenz *=1;
 	}
 	else {
-		ho->differenz = differenz * (-1);
+		ho->differenz *=-1;
 	}
 
-	so->ergebnis = ho->laenge;
+	while (ho->differenz > so->genauigkeit) {
+		ho-> laenge = (ho->laenge + ho->breite)/2;
+		ho->breite = so->zahl / ho->laenge;
+		ho->differenz = ho->laenge - ho->breite;
+		if (ho->differenz >= 0) {
+			ho->differenz *= 1;
+		}
+		else {
+			ho->differenz *= -1;
+		}
 
+		so->ergebnis = ho->laenge;
+	}
 }
 
 
-int main() {
-	sqrt_obj so = userInput();
-	heron_obj ho;
-	ho.laenge = so.zahl;
-	ho.breite = 1;
-
-	
-	heron(&ho, &so);
-	//führt Heron durch bis gewünschte Genauigkeit erreicht ist
-	while (ho.differenz > so.genauigkeit) {
-		heron(&ho, &so);
+double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so) {
+	if (ho->laenge - ho->breite >= 0) {
+		ho->differenz = ho->laenge - ho->breite;
+	}
+	else {
+		ho->differenz = ho->breite - ho->laenge;
 	}
 
-	printf("Quadratwurzel: %lf\n Genauigkeit: %lf\n", so.ergebnis, so.genauigkeit);
-	while (getchar() == '\n') {
-
+	if ((ho->differenz) < so->genauigkeit) {
+		return ho->laenge;
 	}
-	
+	else {
+		ho->laenge = (ho->laenge + ho->breite) / 2;
+		ho->breite = so->zahl / ho->laenge;
 
-	return 0;
+		return berechneWurzelRekursiv(ho, so);
+	}
+}
+
+
+void zeitmessung(heron_obj *ho, sqrt_obj *so) {
+	printf("\n---------------------------------------------------------------");
+	const auto t3 = high_resolution_clock::now(); // Zeitpunkt vor der Test-Schleife
+	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++)
+	{
+		initHeronObject(ho, so->zahl);
+		heron(ho, so);
+	}
+	const auto t4 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
+	printf("\n%i mal iteratriv: %li Nanosekunden", 
+		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t4 - t3).count());
+	printf("\n---------------------------------------------------------------");
+
+	const auto t1 = high_resolution_clock::now(); // Zeitpunkt vor der Test-Schleife
+	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++)
+	{
+		initHeronObject(ho, so->zahl);
+		berechneWurzelRekursiv(ho, so);
+	}
+	const auto t2 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
+	printf("\n%i mal rekursiv: %li Nanosekunden",
+		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t2 - t1).count());
+	printf("\n---------------------------------------------------------------");
 }
 
