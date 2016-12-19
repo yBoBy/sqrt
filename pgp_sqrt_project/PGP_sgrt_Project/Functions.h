@@ -4,7 +4,7 @@
 #include <chrono>
 using namespace std::chrono;
 
-const int ANZAHL_TESTZYKLEN = 99999999;
+const int ANZAHL_TESTZYKLEN = 1000000;
 
 typedef struct sqrt_obj {
 	double zahl;

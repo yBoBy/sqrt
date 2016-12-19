@@ -55,16 +55,21 @@ void heron(heron_obj *ho, sqrt_obj *so) {
 
 
 double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so) {
-	if ((ho->laenge - ho->breite) < so->genauigkeit) {
+	if (ho->laenge - ho->breite >= 0) {
+		ho->differenz = ho->laenge - ho->breite;
+	}
+	else {
+		ho->differenz = ho->breite - ho->laenge;
+	}
+
+	if ((ho->differenz) < so->genauigkeit) {
 		return ho->laenge;
 	}
 	else {
 		ho->laenge = (ho->laenge + ho->breite) / 2;
 		ho->breite = so->zahl / ho->laenge;
-		if (ho->laenge>ho->breite) {
-			return berechneWurzelRekursiv(ho, so);
-		}
-		else return berechneWurzelRekursiv(ho, so);
+
+		return berechneWurzelRekursiv(ho, so);
 	}
 }
 
@@ -78,8 +83,8 @@ void zeitmessung(heron_obj *ho, sqrt_obj *so) {
 		heron(ho, so);
 	}
 	const auto t4 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
-	printf("\n%i mal iteratriv: %li Millisekunden", 
-		ANZAHL_TESTZYKLEN, duration_cast<milliseconds>(t4 - t3).count());
+	printf("\n%i mal iteratriv: %li Nanosekunden", 
+		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t4 - t3).count());
 	printf("\n---------------------------------------------------------------");
 
 	const auto t1 = high_resolution_clock::now(); // Zeitpunkt vor der Test-Schleife
@@ -89,8 +94,8 @@ void zeitmessung(heron_obj *ho, sqrt_obj *so) {
 		berechneWurzelRekursiv(ho, so);
 	}
 	const auto t2 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
-	printf("\n%i mal rekursiv: %li Millisekunden",
-		ANZAHL_TESTZYKLEN, duration_cast<milliseconds>(t2 - t1).count());
+	printf("\n%i mal rekursiv: %li Nanosekunden",
+		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t2 - t1).count());
 	printf("\n---------------------------------------------------------------");
 }
 
