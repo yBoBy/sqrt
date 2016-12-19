@@ -38,15 +38,23 @@ sqrt_obj userInput() {
 
 
 void heron(heron_obj *ho, sqrt_obj *so) {
+	ho->differenz = ho->laenge - ho->breite;
+	if (ho->differenz >= 0) {
+		ho->differenz *=1;
+	}
+	else {
+		ho->differenz *=-1;
+	}
+
 	while (ho->differenz > so->genauigkeit) {
 		ho-> laenge = (ho->laenge + ho->breite)/2;
 		ho->breite = so->zahl / ho->laenge;
-		double differenz = ho->laenge - ho->breite;
-		if (differenz >= 0) {
-			ho->differenz = differenz;
+		ho->differenz = ho->laenge - ho->breite;
+		if (ho->differenz >= 0) {
+			ho->differenz *= 1;
 		}
 		else {
-			ho->differenz = differenz * (-1);
+			ho->differenz *= -1;
 		}
 
 		so->ergebnis = ho->laenge;
