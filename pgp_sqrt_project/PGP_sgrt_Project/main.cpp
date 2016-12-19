@@ -6,9 +6,9 @@
 sqrt_obj userInput() {
 	sqrt_obj tmp;
 	printf("Bitte geben sie die Zahl ein deren Quadratwurzel berechnet werden soll:\n");
-	scanf("%lf", &tmp.zahl);
+	scanf_s("%lf", &tmp.zahl);
 	printf("Bitte geben sie die Genauigkeit ein, mit der die Quadratwurzel berechnet werden soll:\n");
-	scanf("%lf", &tmp.genauigkeit);
+	scanf_s("%lf", &tmp.genauigkeit);
 	tmp.ergebnis = 0;
 	return tmp;
 }
