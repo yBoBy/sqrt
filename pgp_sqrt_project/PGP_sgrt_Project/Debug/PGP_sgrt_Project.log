@@ -1,5 +1,11 @@
 ﻿  main.cpp
-c:\users\moritz\coding\c\pgp_sgrt_project\pgp_sgrt_project\functions.h(8): warning C4091: 'typedef ': ignored on left of 'sqrt_obj' when no variable is declared
-c:\users\moritz\coding\c\pgp_sgrt_project\pgp_sgrt_project\functions.h(14): warning C4091: 'typedef ': ignored on left of 'heron_obj' when no variable is declared
-  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\C\PGP_sgrt_Project\Debug\PGP_sgrt_Project.exe
-  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\C\PGP_sgrt_Project\Debug\PGP_sgrt_Project.pdb (Partial PDB)
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\functions.h(16): warning C4091: 'typedef ': ignored on left of 'sqrt_obj' when no variable is declared
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\functions.h(24): warning C4091: 'typedef ': ignored on left of 'heron_obj' when no variable is declared
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(14): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(16): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(97): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(101): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(107): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(111): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\sqrt\pgp_sqrt_project\Debug\PGP_sgrt_Project.exe
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\sqrt\pgp_sqrt_project\Debug\PGP_sgrt_Project.pdb (Partial PDB)

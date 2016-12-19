@@ -2,21 +2,26 @@
 
 
 int main() {
-	sqrt_obj so = userInput();
+	printf("Willkommen zur Wurzelberechnung nach dem Heron-Verfahren!\n");
+	sqrt_obj so;
 	heron_obj ho;
-	initHeronObject(&ho, so.zahl);
+	char befehl[30];
 
-	heron(&ho, &so);
-	printf("---------------------------------------------------------------\n");
-	printf("Heron iterativ: Quadratwurzel: %lf Genauigkeit: %f\n", so.ergebnis, so.genauigkeit);
+	sqrt_obj resultList [10]; //Liste fuer 10 Ergebnisse
 
-	initHeronObject(&ho, so.zahl);
-	printf("---------------------------------------------------------------\n");
-	printf("Heron rekursiv: Quadratwurzel: %lf Genauigkeit: %f", berechneWurzelRekursiv(&ho, &so), so.genauigkeit);
+	do {
+		so = userInput(); //Werte zur Berechnung im sqrt_Object speichern
+		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur Berechnung setzen
+		berechneWurzelIterativ(&ho, &so);
+		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur erneuten Berechnung zuruecksetzen
+		so.ergebnis_rekursiv = berechneWurzelRekursiv(&ho, &so);
+		zeitmessung(&ho, &so); //Zeitmessung durchfuehren
+		addToList(&so, &resultList[0]);
+		ergebnisAusgabe(&ho, &so);
+		printf("Enter /exit to exit or any key to continue: ");
+		scanf("%30s", &befehl);
+	} while (0 != strcmp("/exit", befehl));
 
-	zeitmessung(&ho, &so);
-
-	getchar(); getchar();
 	return 0;
 }
 
@@ -28,16 +33,19 @@ void initHeronObject(heron_obj *ho, int zahl) {
 
 sqrt_obj userInput() {
 	sqrt_obj tmp;
-	printf("Bitte geben sie die Zahl ein deren Quadratwurzel berechnet werden soll:\n");
+	printf("\n\nBitte geben sie die Zahl ein deren Quadratwurzel berechnet werden soll:\n");
 	scanf_s("%lf", &tmp.zahl);
 	printf("Bitte geben sie die Genauigkeit ein, mit der die Quadratwurzel berechnet werden soll:\n");
 	scanf_s("%lf", &tmp.genauigkeit);
-	tmp.ergebnis = 0;
+	tmp.ergebnis_iterativ = 0;
+	tmp.ergebnis_rekursiv = 0;
+	tmp.zeit_iterativ = 0;
+	tmp.zeit_rekursiv = 0;
 	return tmp;
 }
 
 
-void heron(heron_obj *ho, sqrt_obj *so) {
+void berechneWurzelIterativ(heron_obj *ho, sqrt_obj *so) {
 	ho->differenz = ho->laenge - ho->breite;
 	if (ho->differenz >= 0) {
 		ho->differenz *=1;
@@ -57,7 +65,7 @@ void heron(heron_obj *ho, sqrt_obj *so) {
 			ho->differenz *= -1;
 		}
 
-		so->ergebnis = ho->laenge;
+		so->ergebnis_iterativ = ho->laenge;
 	}
 }
 
@@ -83,27 +91,42 @@ double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so) {
 
 
 void zeitmessung(heron_obj *ho, sqrt_obj *so) {
-	printf("\n---------------------------------------------------------------");
-	const auto t3 = high_resolution_clock::now(); // Zeitpunkt vor der Test-Schleife
-	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++)
-	{
+	//Zeitberechnung fuer Iterative Methode
+	const auto t3 = high_resolution_clock::now(); // t3 = Zeitpunkt vor der Test-Schleife (iterativ)
+	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++){
 		initHeronObject(ho, so->zahl);
-		heron(ho, so);
+		berechneWurzelIterativ(ho, so);
 	}
-	const auto t4 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
-	printf("\n%i mal iteratriv: %li Nanosekunden", 
-		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t4 - t3).count());
-	printf("\n---------------------------------------------------------------");
+	const auto t4 = high_resolution_clock::now(); //t4 = Zeitpunkt nach der Test-Schleife (iterativ)
+	so->zeit_iterativ = duration_cast<nanoseconds>(t4 - t3).count() / ANZAHL_TESTZYKLEN;
 
-	const auto t1 = high_resolution_clock::now(); // Zeitpunkt vor der Test-Schleife
-	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++)
-	{
+
+	//Zeitberechnung fuer Rekursive Methode
+	const auto t1 = high_resolution_clock::now(); // t1 = Zeitpunkt vor der Test-Schleife (rekursiv)
+	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++){
 		initHeronObject(ho, so->zahl);
 		berechneWurzelRekursiv(ho, so);
 	}
-	const auto t2 = high_resolution_clock::now(); // Zeitpunkt nach der Test-Schleife
-	printf("\n%i mal rekursiv: %li Nanosekunden",
-		ANZAHL_TESTZYKLEN, duration_cast<nanoseconds>(t2 - t1).count());
-	printf("\n---------------------------------------------------------------");
+	const auto t2 = high_resolution_clock::now(); // t2 = Zeitpunkt nach der Test-Schleife (rekursiv)
+	so->zeit_rekursiv = duration_cast<nanoseconds>(t2 - t1).count() / ANZAHL_TESTZYKLEN;
 }
 
+void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so) {
+	printf("---------------------------------------------------------------\n");
+
+	printf("Berechnung fuer Zahl: %lf >>>> Genauigkeit: %lf", so->zahl, so->genauigkeit);
+
+	printf("\nIterativ\n	Quadratwurzel: %lf \n	Zeit: %li Nanosekunden\n",
+		so->ergebnis_iterativ, so->zeit_iterativ);
+
+	printf("\n---------------------------------------------------------------\n");
+
+	printf("Rekursiv\n	Quadratwurzel: %lf \n	Zeit: %li Nanosekunden",
+		so->ergebnis_rekursiv, so->zeit_rekursiv);
+	
+	printf("\n---------------------------------------------------------------\n\n");
+}
+
+void addToList(sqrt_obj *so, sqrt_obj list[]) {
+
+}

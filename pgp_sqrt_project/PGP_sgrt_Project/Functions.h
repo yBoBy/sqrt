@@ -9,8 +9,13 @@ const int ANZAHL_TESTZYKLEN = 1000000;
 typedef struct sqrt_obj {
 	double zahl;
 	double genauigkeit;
-	double ergebnis;
+	double ergebnis_iterativ;
+	double ergebnis_rekursiv;
+	int zeit_iterativ;
+	int zeit_rekursiv;
 };
+
+
 
 typedef struct heron_obj {
 	double laenge;
@@ -18,8 +23,8 @@ typedef struct heron_obj {
 	double differenz;
 };
 
-//nähert laenge und breite einander an ohne das Produkt der beiden zu verändern
-void heron(heron_obj *ho, sqrt_obj *so);
+/*nähert laenge und breite einander an ohne das Produkt der beiden zu verändern*/
+void berechneWurzelIterativ(heron_obj *ho, sqrt_obj *so);
 
 /*
 * Verfahren nach Heron:
@@ -29,7 +34,7 @@ void heron(heron_obj *ho, sqrt_obj *so);
 * Und die Differenz der beiden Seitenlaengen (die sich immer mehr annähern) ist unsere Genauigkeit.
 *
 * Struct ho : laenge, breite, differenz
-* Struct so : zahl, genauigkeit, ergebnis
+* Struct so : zahl, genauigkeit, ergebnis, zeit_rekursiv, zeit_iterativ
 * zahl - Die Zahl deren Quadratwurzel berechnet werden soll
 * genauigkeit - Die Genauigkeit mit der die Zahl berechnet werden soll
 * ergebnis - wird fuer die Rekursion nicht benoetigt - das Ergebnis ist die Rückgabe der Methode
@@ -46,11 +51,16 @@ double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so);
 */
 void zeitmessung(heron_obj *ho, sqrt_obj *so);
 
-// Bringt das Heron-Objekt in den Ausgangs Zustand
+/*Bringt das Heron-Objekt in den Ausgangs Zustand*/
 void initHeronObject(heron_obj *ho, int zahl);
 
-//Fragt vom Nutzer die Daten zu Berechnung ab und gibt sie als sqrt_obj zurück
+/*Fragt vom Nutzer die Daten zu Berechnung ab und gibt sie als sqrt_obj zurück*/
 sqrt_obj userInput();
+
+/*Gibt die errechneten Wwert formatiert in die Konsole aus*/
+void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so);
+
+void addToList(sqrt_obj *so, sqrt_obj list[]);
 
 #endif
 
