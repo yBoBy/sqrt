@@ -60,7 +60,7 @@ sqrt_obj userInput();
 /*Gibt die errechneten Wwert formatiert in die Konsole aus*/
 void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so);
 
-void addToList(sqrt_obj *so, sqrt_obj list[]);
+void addToList(sqrt_obj so);
 
 #endif
 

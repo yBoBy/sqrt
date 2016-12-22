@@ -1,13 +1,15 @@
 #include "Functions.h"
 
 
+sqrt_obj resultList[10]; //Liste fuer 10 Ergebnisse
+
 int main() {
 	printf("Willkommen zur Wurzelberechnung nach dem Heron-Verfahren!\n");
 	sqrt_obj so;
 	heron_obj ho;
 	char befehl[30];
 
-	sqrt_obj resultList [10]; //Liste fuer 10 Ergebnisse
+	
 
 	do {
 		so = userInput(); //Werte zur Berechnung im sqrt_Object speichern
@@ -16,10 +18,10 @@ int main() {
 		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur erneuten Berechnung zuruecksetzen
 		so.ergebnis_rekursiv = berechneWurzelRekursiv(&ho, &so);
 		zeitmessung(&ho, &so); //Zeitmessung durchfuehren
-		addToList(&so, &resultList[0]);
 		ergebnisAusgabe(&ho, &so);
+		addToList(so);
 		printf("Enter /exit to exit or any key to continue: ");
-		scanf("%30s", &befehl);
+		scanf_s("%30s", befehl, _countof(befehl));
 	} while (0 != strcmp("/exit", befehl));
 
 	return 0;
@@ -125,8 +127,22 @@ void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so) {
 		so->ergebnis_rekursiv, so->zeit_rekursiv);
 	
 	printf("\n---------------------------------------------------------------\n\n");
+	//Ausgabe letzten 10 Berechnungen
+	printf("Die letzten 10 Berechnungen:\n");
+	for (int i = 0; i < 10; i++) {
+		if(resultList[i].zahl!=0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
+		printf("Zahl %7.2lf Ergebnis: %6.2lf interativ in %4.li ns, rekursiv in %4.li ns\n", 
+			resultList[i].zahl,
+			resultList[i].ergebnis_iterativ, resultList[i].zeit_iterativ,
+			resultList[i].zeit_rekursiv);
+	}
 }
 
-void addToList(sqrt_obj *so, sqrt_obj list[]) {
-
+void addToList(sqrt_obj so) {
+	for (int i = 9; i>0; i--) {
+		//Alles in der Liste eins nach hinten schieben, das letzte Element faellt raus
+		resultList[i] = resultList[i-1];
+	}
+	//NeusteBerechnung hinzufuegen
+	resultList[0] = so;
 }
