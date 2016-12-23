@@ -9,8 +9,6 @@ int main() {
 	heron_obj ho;
 	char befehl[30];
 
-	
-
 	do {
 		so = userInput(); //Werte zur Berechnung im sqrt_Object speichern
 		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur Berechnung setzen
@@ -19,6 +17,7 @@ int main() {
 		so.ergebnis_rekursiv = berechneWurzelRekursiv(&ho, &so);
 		zeitmessung(&ho, &so); //Zeitmessung durchfuehren
 		ergebnisAusgabe(&ho, &so);
+		ausgabeLetzte10Ergebnisse();
 		addToList(so);
 		printf("Enter /exit to exit or any key to continue: ");
 		scanf_s("%30s", befehl, _countof(befehl));
@@ -81,13 +80,14 @@ double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so) {
 	}
 
 	if ((ho->differenz) < so->genauigkeit) {
-		return ho->laenge;
+		//Rekursionsanker, hier bricht die Rekursion ab
+		return ho->laenge; 
 	}
 	else {
 		ho->laenge = (ho->laenge + ho->breite) / 2;
 		ho->breite = so->zahl / ho->laenge;
-
-		return berechneWurzelRekursiv(ho, so);
+		//Erneuter Aufruf der Funktion mit veraenderten Werten
+		return berechneWurzelRekursiv(ho, so); 
 	}
 }
 
@@ -127,14 +127,19 @@ void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so) {
 		so->ergebnis_rekursiv, so->zeit_rekursiv);
 	
 	printf("\n---------------------------------------------------------------\n\n");
+
+}
+
+
+void ausgabeLetzte10Ergebnisse(){
 	//Ausgabe letzten 10 Berechnungen
 	printf("Die letzten 10 Berechnungen:\n");
 	for (int i = 0; i < 10; i++) {
-		if(resultList[i].zahl!=0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
-		printf("Zahl %7.2lf Ergebnis: %6.2lf interativ in %4.li ns, rekursiv in %4.li ns\n", 
-			resultList[i].zahl,
-			resultList[i].ergebnis_iterativ, resultList[i].zeit_iterativ,
-			resultList[i].zeit_rekursiv);
+		if (resultList[i].zahl != 0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
+			printf("Zahl %7.2lf Ergebnis: %6.2lf interativ in %4.li ns, rekursiv in %4.li ns\n",
+				resultList[i].zahl,
+				resultList[i].ergebnis_iterativ, resultList[i].zeit_iterativ,
+				resultList[i].zeit_rekursiv);
 	}
 }
 

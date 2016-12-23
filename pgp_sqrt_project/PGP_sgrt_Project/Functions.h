@@ -6,7 +6,7 @@ using namespace std::chrono;
 
 const int ANZAHL_TESTZYKLEN = 1000000;
 
-typedef struct sqrt_obj {
+struct sqrt_obj {
 	double zahl;
 	double genauigkeit;
 	double ergebnis_iterativ;
@@ -17,7 +17,7 @@ typedef struct sqrt_obj {
 
 
 
-typedef struct heron_obj {
+struct heron_obj {
 	double laenge;
 	double breite;
 	double differenz;
@@ -61,6 +61,8 @@ sqrt_obj userInput();
 void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so);
 
 void addToList(sqrt_obj so);
+
+void ausgabeLetzte10Ergebnisse();
 
 #endif
 
