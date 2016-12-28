@@ -1,145 +1,169 @@
 #include "Functions.h"
 
+/*resultList - Platz fuer 10 Berechnungen um diese 
+später als eine Art Historie auf der Konsole auszugeben*/
+sqrt_obj resultList[10]; 
 
-sqrt_obj resultList[10]; //Liste fuer 10 Ergebnisse
 
 int main() {
 	printf("Willkommen zur Wurzelberechnung nach dem Heron-Verfahren!\n");
 	sqrt_obj so;
 	heron_obj ho;
+	/*Das Char Array nimmt Befehle des Benutzers auf.
+	Anhand der Befehle wird entschieden ob das Programm verlassen werden soll*/
 	char befehl[30];
 
 	do {
-		so = userInput(); //Werte zur Berechnung im sqrt_Object speichern
-		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur Berechnung setzen
-		berechneWurzelIterativ(&ho, &so);
-		initHeronObject(&ho, so.zahl); //Werte im Heron Objekt zur erneuten Berechnung zuruecksetzen
-		so.ergebnis_rekursiv = berechneWurzelRekursiv(&ho, &so);
-		zeitmessung(&ho, &so); //Zeitmessung durchfuehren
+		userInput(&so); //Werte zur Berechnung im sqrt_Object speichern
+		initHeronObject(&ho, so.number); //Werte im Heron Objekt zur Berechnung setzen
+		sqrtIterativ(&ho, &so);
+		initHeronObject(&ho, so.number); //Werte im Heron Objekt zur erneuten Berechnung zuruecksetzen
+		so.resultRecursive = sqrtRecursive(&ho, &so);
+		takeTimeRecursivVsIterativSqrt(&ho, &so); //Zeitmessung durchfuehren
 		ergebnisAusgabe(&ho, &so);
-		ausgabeLetzte10Ergebnisse();
+		printLastTenResults();
 		addToList(so);
-		printf("Enter /exit to exit or any key to continue: ");
+		printf("Enter 'exit' or any number to continue: ");
 		scanf_s("%30s", befehl, _countof(befehl));
-	} while (0 != strcmp("/exit", befehl));
-
+	} while (0 != strcmp("exit", befehl));
+	
 	return 0;
 }
 
+/*Startwerte festlegen die fuer die Berechnungen notwendig sind*/
 void initHeronObject(heron_obj *ho, int zahl) {
-	ho->laenge =zahl;
-	ho->breite =1;
-	ho->differenz = ho->laenge- ho->breite;
+	ho->length =zahl;
+	ho->width =1;
+	ho->difference = ho->length- ho->width;
 }
 
-sqrt_obj userInput() {
-	sqrt_obj tmp;
-	printf("\n\nBitte geben sie die Zahl ein deren Quadratwurzel berechnet werden soll:\n");
-	scanf_s("%lf", &tmp.zahl);
-	printf("Bitte geben sie die Genauigkeit ein, mit der die Quadratwurzel berechnet werden soll:\n");
-	scanf_s("%lf", &tmp.genauigkeit);
-	tmp.ergebnis_iterativ = 0;
-	tmp.ergebnis_rekursiv = 0;
-	tmp.zeit_iterativ = 0;
-	tmp.zeit_rekursiv = 0;
-	return tmp;
+/*Die Zahl deren Quadratwurzel berechnet werden soll einlesen
+und die Genauigkeit mit der die Quadratwurzel berechnet werden soll einlesen*/
+void userInput(sqrt_obj *so) {
+	bool success = false;
+
+	while (!success) {
+		int c;
+		printf("\n\nBitte geben sie die Zahl ein deren Quadratwurzel berechnet werden soll:\n");
+		int statusScanNumber = scanf_s("%lf", &so->number);
+		if (statusScanNumber == 0) {
+			do c = getchar(); while (c!='\n'); //Fehleingaben abfangen
+			printf("Bitte nur reele Zahlen eingeben. Neustart.\n");
+			continue;
+		}
+
+		printf("Bitte geben sie die Genauigkeit ein, mit der die Quadratwurzel berechnet werden soll:\n");
+		int statusScanPrecision = scanf_s("%lf", &so->precision);
+		if (statusScanPrecision == 0) {
+			do c = getchar(); while (c != '\n'); //Fehleingaben abfangen;
+			printf("Bitte nur reele Zahlen eingeben. Neustart.\n");
+			continue;
+		}
+		// Die restlichen Werte initalisieren
+		so->resultIterativ = 0;
+		so->resultRecursive = 0;
+		so->timeIterativ = 0;
+		so->timeRecursiv = 0;
+		success = true;
+	}
 }
 
 
-void berechneWurzelIterativ(heron_obj *ho, sqrt_obj *so) {
-	ho->differenz = ho->laenge - ho->breite;
-	if (ho->differenz >= 0) {
-		ho->differenz *=1;
+void sqrtIterativ(heron_obj *ho, sqrt_obj *so) {
+	ho->difference = ho->length - ho->width;
+	if (ho->difference >= 0) {
+		ho->difference *=1;
 	}
 	else {
-		ho->differenz *=-1;
+		ho->difference *=-1;
 	}
 
-	while (ho->differenz > so->genauigkeit) {
-		ho-> laenge = (ho->laenge + ho->breite)/2;
-		ho->breite = so->zahl / ho->laenge;
-		ho->differenz = ho->laenge - ho->breite;
-		if (ho->differenz >= 0) {
-			ho->differenz *= 1;
+	while (ho->difference > so->precision) {
+		ho-> length = (ho->length + ho->width)/2;
+		ho->width = so->number / ho->length;
+		ho->difference = ho->length - ho->width;
+		if (ho->difference >= 0) {
+			ho->difference *= 1;
 		}
 		else {
-			ho->differenz *= -1;
+			ho->difference *= -1;
 		}
-
-		so->ergebnis_iterativ = ho->laenge;
+		so->resultIterativ = ho->length;
 	}
 }
 
 
-double berechneWurzelRekursiv(heron_obj *ho, sqrt_obj *so) {
-	if (ho->laenge - ho->breite >= 0) {
-		ho->differenz = ho->laenge - ho->breite;
+double sqrtRecursive(heron_obj *ho, sqrt_obj *so) {
+	if (ho->length - ho->width >= 0) {
+		ho->difference = ho->length - ho->width;
 	}
 	else {
-		ho->differenz = ho->breite - ho->laenge;
+		ho->difference = ho->width - ho->length;
 	}
 
-	if ((ho->differenz) < so->genauigkeit) {
+	if ((ho->difference) < so->precision) {
 		//Rekursionsanker, hier bricht die Rekursion ab
-		return ho->laenge; 
+		return ho->length; 
 	}
 	else {
-		ho->laenge = (ho->laenge + ho->breite) / 2;
-		ho->breite = so->zahl / ho->laenge;
+		ho->length = (ho->length + ho->width) / 2;
+		ho->width = so->number / ho->length;
 		//Erneuter Aufruf der Funktion mit veraenderten Werten
-		return berechneWurzelRekursiv(ho, so); 
+		return sqrtRecursive(ho, so); 
 	}
 }
 
 
-void zeitmessung(heron_obj *ho, sqrt_obj *so) {
+
+
+void takeTimeRecursivVsIterativSqrt(heron_obj *ho, sqrt_obj *so) {
 	//Zeitberechnung fuer Iterative Methode
 	const auto t3 = high_resolution_clock::now(); // t3 = Zeitpunkt vor der Test-Schleife (iterativ)
-	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++){
-		initHeronObject(ho, so->zahl);
-		berechneWurzelIterativ(ho, so);
+	for (size_t i = 0; i != TEST_ITERATION_COUNT; i++){
+		initHeronObject(ho, so->number);
+		sqrtIterativ(ho, so);
 	}
 	const auto t4 = high_resolution_clock::now(); //t4 = Zeitpunkt nach der Test-Schleife (iterativ)
-	so->zeit_iterativ = duration_cast<nanoseconds>(t4 - t3).count() / ANZAHL_TESTZYKLEN;
+	so->timeIterativ = duration_cast<nanoseconds>(t4 - t3).count() / TEST_ITERATION_COUNT;
 
 
 	//Zeitberechnung fuer Rekursive Methode
 	const auto t1 = high_resolution_clock::now(); // t1 = Zeitpunkt vor der Test-Schleife (rekursiv)
-	for (size_t i = 0; i != ANZAHL_TESTZYKLEN; i++){
-		initHeronObject(ho, so->zahl);
-		berechneWurzelRekursiv(ho, so);
+	for (size_t i = 0; i != TEST_ITERATION_COUNT; i++){
+		initHeronObject(ho, so->number);
+		sqrtRecursive(ho, so);
 	}
 	const auto t2 = high_resolution_clock::now(); // t2 = Zeitpunkt nach der Test-Schleife (rekursiv)
-	so->zeit_rekursiv = duration_cast<nanoseconds>(t2 - t1).count() / ANZAHL_TESTZYKLEN;
+	so->timeRecursiv = duration_cast<nanoseconds>(t2 - t1).count() / TEST_ITERATION_COUNT;
 }
 
 void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so) {
 	printf("---------------------------------------------------------------\n");
 
-	printf("Berechnung fuer Zahl: %lf >>>> Genauigkeit: %lf", so->zahl, so->genauigkeit);
+	printf("Berechnung fuer Zahl: %lf >>>> Genauigkeit: %lf", so->number, so->precision);
 
 	printf("\nIterativ\n	Quadratwurzel: %lf \n	Zeit: %li Nanosekunden\n",
-		so->ergebnis_iterativ, so->zeit_iterativ);
+		so->resultIterativ, so->timeIterativ);
 
 	printf("\n---------------------------------------------------------------\n");
 
 	printf("Rekursiv\n	Quadratwurzel: %lf \n	Zeit: %li Nanosekunden",
-		so->ergebnis_rekursiv, so->zeit_rekursiv);
+		so->resultRecursive, so->timeRecursiv);
 	
 	printf("\n---------------------------------------------------------------\n\n");
 
 }
 
 
-void ausgabeLetzte10Ergebnisse(){
+void printLastTenResults(){
 	//Ausgabe letzten 10 Berechnungen
 	printf("Die letzten 10 Berechnungen:\n");
 	for (int i = 0; i < 10; i++) {
-		if (resultList[i].zahl != 0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
+		if (resultList[i].number != 0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
 			printf("Zahl %7.2lf Ergebnis: %6.2lf interativ in %4.li ns, rekursiv in %4.li ns\n",
-				resultList[i].zahl,
-				resultList[i].ergebnis_iterativ, resultList[i].zeit_iterativ,
-				resultList[i].zeit_rekursiv);
+				resultList[i].number,
+				resultList[i].resultIterativ, resultList[i].timeIterativ,
+				resultList[i].timeRecursiv);
 	}
 }
 
