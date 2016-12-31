@@ -58,9 +58,11 @@ void userInput(sqrt_obj *so);
 /*Gibt die errechneten Wwert formatiert in die Konsole aus*/
 void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so);
 
-void addToList(sqrt_obj so);
+void addToList(sqrt_obj so, sqrt_obj *pointerToResultList);
 
-void printLastTenResults();
+void printLastTenResults(sqrt_obj *so);
+
+void initResultArray(sqrt_obj *pointerToResultArray);
 
 #endif
 
