@@ -1,9 +1,7 @@
 #include "Functions.h"
 
-/*resultList - Platz fuer 10 Berechnungen um diese 
-später als eine Art Historie auf der Konsole auszugeben*/
-sqrt_obj resultList[10]; 
 
+const int lengthResultList = 10;
 
 int main() {
 	printf("Willkommen zur Wurzelberechnung nach dem Heron-Verfahren!\n");
@@ -12,6 +10,12 @@ int main() {
 	/*Das Char Array nimmt Befehle des Benutzers auf.
 	Anhand der Befehle wird entschieden ob das Programm verlassen werden soll*/
 	char befehl[30];
+	/*resultList - Platz fuer (lengthResultList) Berechnungen um diese
+	später als eine Art Historie auf der Konsole auszugeben*/
+	sqrt_obj resultList[lengthResultList];
+
+	initResultArray(resultList);
+	
 
 	do {
 		userInput(&so); //Werte zur Berechnung im sqrt_Object speichern
@@ -21,8 +25,8 @@ int main() {
 		so.resultRecursive = sqrtRecursive(&ho, &so);
 		takeTimeRecursivVsIterativSqrt(&ho, &so); //Zeitmessung durchfuehren
 		ergebnisAusgabe(&ho, &so);
-		printLastTenResults();
-		addToList(so);
+		printLastTenResults(resultList);
+		addToList(so, resultList);
 		printf("Enter 'exit' or any number to continue: ");
 		scanf_s("%30s", befehl, _countof(befehl));
 	} while (0 != strcmp("exit", befehl));
@@ -35,6 +39,13 @@ void initHeronObject(heron_obj *ho, int zahl) {
 	ho->length =zahl;
 	ho->width =1;
 	ho->difference = ho->length- ho->width;
+}
+
+void initResultArray(sqrt_obj *pointerToResultArray) {
+	for (int i = 0; i < lengthResultList; i++) {
+		pointerToResultArray->number = 0;
+		pointerToResultArray++;
+	}
 }
 
 /*Die Zahl deren Quadratwurzel berechnet werden soll einlesen
@@ -155,23 +166,24 @@ void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so) {
 }
 
 
-void printLastTenResults(){
-	//Ausgabe letzten 10 Berechnungen
-	printf("Die letzten 10 Berechnungen:\n");
-	for (int i = 0; i < 10; i++) {
-		if (resultList[i].number != 0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
+void printLastTenResults(sqrt_obj pointerResultList[]){
+	printf("Die letzten Berechnungen:\n");
+	for (int i = 0; i < lengthResultList; i++) {
+		if (pointerResultList->number != 0)//Nur Eintraege aus der Liste ausgeben die ein Ergebnis haben
 			printf("Zahl %7.2lf Ergebnis: %6.2lf interativ in %4.li ns, rekursiv in %4.li ns\n",
-				resultList[i].number,
-				resultList[i].resultIterativ, resultList[i].timeIterativ,
-				resultList[i].timeRecursiv);
+				pointerResultList->number,
+				pointerResultList->resultIterativ, pointerResultList->timeIterativ,
+				pointerResultList->timeRecursiv);
+		pointerResultList++;
 	}
+	
 }
 
-void addToList(sqrt_obj so) {
-	for (int i = 9; i>0; i--) {
+void addToList(sqrt_obj so, sqrt_obj pointerToResultList[]) {
+	for (int i = lengthResultList-1; i>=0; i--) {
 		//Alles in der Liste eins nach hinten schieben, das letzte Element faellt raus
-		resultList[i] = resultList[i-1];
+		pointerToResultList[i] = pointerToResultList[i-1];
 	}
 	//NeusteBerechnung hinzufuegen
-	resultList[0] = so;
+	pointerToResultList[0] = so;
 }
