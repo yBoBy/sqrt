@@ -1,0 +1,12 @@
+﻿  main.cpp
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(35): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(37): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(44): warning C4805: '==': unsafe mix of type 'int' and type 'bool' in operation
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(31): warning C4477: 'scanf_s' : format string '%10s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'unsigned __int64'
+  c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(31): note: this argument is used as a buffer size
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(193): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(197): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(203): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\moritz\coding\sqrt\pgp_sqrt_project\pgp_sgrt_project\main.cpp(207): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\sqrt\pgp_sqrt_project\x64\Debug\PGP_sgrt_Project.exe
+  PGP_sgrt_Project.vcxproj -> C:\Users\Moritz\Coding\sqrt\pgp_sqrt_project\x64\Debug\PGP_sgrt_Project.pdb (Partial PDB)

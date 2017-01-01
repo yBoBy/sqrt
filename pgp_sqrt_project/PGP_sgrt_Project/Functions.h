@@ -56,13 +56,16 @@ void initHeronObject(heron_obj *ho, int zahl);
 void userInput(sqrt_obj *so);
 
 /*Gibt die errechneten Wwert formatiert in die Konsole aus*/
-void ergebnisAusgabe(heron_obj *ho, sqrt_obj *so);
+void resultOutput(heron_obj *ho, sqrt_obj *so, int outputMode);
 
-void addToList(sqrt_obj so, sqrt_obj *pointerToResultList);
+void addToList(sqrt_obj so, sqrt_obj pointerToResultList[]);
 
-void printLastTenResults(sqrt_obj *so);
+void printLastTenResults(sqrt_obj pointerResultList[]);
 
 void initResultArray(sqrt_obj *pointerToResultArray);
 
+void commandHandler(char befehl[], sqrt_obj resultList[], int *outputMode);
+
+void setOutputMode(int *outputMode);
 #endif
 
